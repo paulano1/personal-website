@@ -1,0 +1,68 @@
+---
+title: 'Time Value of Money: A Comprehensive Guide'
+date: '2016-03-08'
+tags: ['finance', 'economics', 'money', 'investing']
+draft: false
+summary: 'A detailed exploration of the time value of money, interest rates, and fundamental financial concepts.'
+---
+
+# Quantitative Methods - Part 1: Time Value and Money
+
+![Yield Curve showing relationship between time and interest rates](/static/images/time-value-money.png)
+
+## The Three Rules of Money
+
+1. **Money sooner is more valuable than money tomorrow**: Now if I give you $100 today it is more valuable to you because a lot(risks) can happen to that money if I do not give it to you now. Like inflation, bankruptcy, or even a natural calamity. That is why when you take out a loan you receive the money instantly, but you have to pay back the money with an additional interest rate we will study the interest rates later
+
+2. **larger cashflows are more valuable than smaller cashflows**: It is pretty self-explanatory, except cashflows which is basically a stream of money
+
+3. **Less risky cash-flow is more valuable than risky cashflows**: Now to understand it, let's consider the fact that you have invested $1000 in a government bond and $1000 on Amazon equity. Now Amazon is a pretty safe bet and with its current pace it will return you more than bonds will. But quantitatively, there have been only 189\* cases of the government going bankrupt(refusing to pay their debt) compared to the equity market where companies go bust every alternate day. So, statistically, your risks are far lower in government bonds than in the equity market. Therefore, your $1000 in government is far more valuable than $1000 on riskier investments like equity.
+
+After understanding the three rules of money. Let's dive into Time and Value
+
+### Three Fundamental Interest Rate Concepts
+
+Time and value are correlated, with time the value of your investment is supposed to increase (if you don't follow WallStreetBets). To understand how your investment attracts value over time, we use a metric known as interest rate(r). Interest rates can be classified into three fundamental concepts.
+
+1. **Required rate of return**: It is the amount of money you require when you are investing. It usually includes several other metrics that we will talk about later, but it is the interest rate that you see everywhere, be it credit card or personal loan. Quantitatively, the formula is :
+
+> MoneyToday(1+r) = Money Tomorrow
+
+2. **Discounted Rate**:It is exactly what it sounds like. It is a discounted rate that you get for investing in something right now or at a certain point in time. For example, FD(Fixed deposit) where you are promised that you will gain a 5% interest rate 10 years later if you invest a sum of $10,000 right now.
+
+Let's derive the equation from the Required rate of return equation:
+
+> MoneyToday = Money Tomorrow/ (1+r)
+
+The equation is the same as the required rate of return, but you get to understand how much discount you are getting or what is the value of your money today if you follow the investment.
+
+3. **Opportunity Cost** :Value Lost/Value gained. Lower the value you gain higher will be your opportunity cost, consider it as a college where you are paying for tuition and getting the education in return which you can use to create value.
+
+> Required interest rate =discounted rate = opportunity cost Any one of the three can be referred to the same thing in a given problem which is interest rate
+
+_Note: Required interest rate = discounted rate = opportunity cost in most problems_
+
+## What is Interest Rate? How is it calculated?
+
+1.  Inflation Premium (π²): Now if you refer to our first rule of money, "money sooner is more valuable than money later". It is because of inflation, to decrease friction(liquidity) in the market, the Federal Reserve prints more money every day which decreases the overall value of money with time. When you are investing in an investment vehicle, you expect the value of your money to stay intact, at the very least. That is why the inflation premium(π²) is added to the interest rate. Cases where interest rates only include inflation premium are risk-free investments like treasury bills.
+
+We will be using the additive property of interest rates, therefore:
+
+> Rf+π² = interest rate
+
+2. Default Risk Premium (Rd): Now, if your startup is receiving a loan from a bank, there is a very high probability that the startup might not turn into a company and default on the loans. After all, only 1 in 3500 startups succeed. So, the bank will charge a default risk premium in your interest rate as it is taking the risk of investing in your startup. Rf+π²+Rd = interest rate
+3. Liquidity Premium (RL):If you live in the US, you probably heard that your loan was sold to another bank or a company. It is because maybe your loan was too risky for the company or the fixed return may be too low for the company. Anytime the company needs liquidity in the form of immediate cash, it tries to sell off its investments. Mortgages are easy to sell, but student loans are not, when companies mention liquidity premium this is what they refer to. It is determined by the ability to liquidate their or your investment immediately in times of a cash crunch. Rf+π²+Rd+RL = interest rate
+
+4. Maturity PremiumTo understand maturity premium, we have to remember that risk is proportional to time. For example, if investing $1000 into policy for 15 years, you don't know what will happen in the next 15 years be it high inflation or default. That is why we know that when risks are high required rate of return is higher for an investment, and considering risk is proportional to time. When investing/taking a loan for a longer period, the investment requires a maturity premium that will be charged on top of other
+
+As you can see, the yield curve which states that there is exponential relation between yield and price. As we increase the time of maturity, the required rate of return or interest rate increases
+
+## ![reference](/static/images/yeild-curve-tmv.png)
+
+**Sources:**
+
+- [Countries Don't Go Bankrupt? The 20th Century Proves Otherwise](https://www.rstreet.org/2016/02/22/countries-dont-go-bankrupt-the-20th-century-proves-otherwise/)
+
+```
+
+```
