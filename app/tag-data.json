@@ -1,11 +1,11 @@
 {
-  "finance": 1,
-  "economics": 1,
-  "money": 1,
-  "investing": 1,
   "devops": 1,
   "infrastructure": 1,
   "software": 1,
   "studying-abroad": 1,
-  "undergrad": 1
+  "undergrad": 1,
+  "finance": 1,
+  "economics": 1,
+  "money": 1,
+  "investing": 1
 }
