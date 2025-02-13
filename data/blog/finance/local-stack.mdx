@@ -1,0 +1,43 @@
+---
+title: 'Why localstack is important!'
+date: '2025-01-01'
+tags: ['devops', 'infrastructure', 'software']
+draft: false
+summary: 'How you can improve your development experience with localstack'
+---
+
+While working on a lambda that would listen to a SNS topic, I realized how easy it has become now to test your infra locally. I could create an SNS topic within my local machine and test its invocation before pushing the code.
+
+## The Old Way: Testing AWS Infrastructure
+
+2 years back when I was at Amazon Robotics, I remember how painful it was to locally test any of the infra that I was working on. If I had to check if my configuration worked, I would have to wait 12-15 minutes for the entire infra to deploy (hence my branches usually had way more commits than necessary).
+
+And if you're testing your database, with the usual convention of placing infra within a private subnet with no inbound internet access (to protect your resources from external traffic), it was nothing but absolute pain. The most common pattern was that one would setup a bastion box that would pipe the connection from the local machine within the private subnet.
+
+## The Cost Factor
+
+Idiomatically, if I am testing something locally, it should be contained within my local environment. And then there's the COST! These bastion boxes run within small EC2 instances which cost money (after you run out of your free tier). It worked for Amazon Fulfillment Technologies & Robotics since they get a massive discount on AWS resources (upwards of 70%), but it never made sense to use the setup for my other projects.
+
+## Enter LocalStack: AWS in Your Local Machine
+
+Until I found out about LocalStack, which lets you have a full-blown AWS environment in your local machine. You can use the aws-local CLI to use the same commands to create and test your resources.
+
+The beautiful part is, it is available as a docker container. To add it to your project, all you need is a docker-compose file:
+
+```yaml
+services:
+  localstack:
+    # LocalStack container
+    image: localstack/localstack:latest
+    ports:
+      # Map the port so you can access the API from the host machine
+      - 4566:4566
+    environment:
+      - DEBUG=1
+```
+
+That's it! Then you can use AWS SDK (boto3 and etc) to connect to these resources locally.
+
+## Using with Terraform
+
+I usually prefer configuring my infra using terraform (up for CDK vs terraform debate), and I can use my existing terraform setup with LocalStack - how cool is that! All I have to do is use the `tflocal` command to run the existing setup locally.
