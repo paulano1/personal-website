@@ -1,7 +1,7 @@
 import Image from './Image'
 import Link from './Link'
 
-const Card = ({ title, description, imgSrc, href }) => (
+const Card = ({ title, description, imgSrc, href, technologiesUsed }) => (
   <div className="md max-w-[544px] p-4 md:w-1/2">
     <div
       className={`${
@@ -48,6 +48,18 @@ const Card = ({ title, description, imgSrc, href }) => (
             Learn more &rarr;
           </Link>
         )}
+      </div>
+      <div className="p-6">
+        <div className="flex flex-wrap gap-2">
+          {technologiesUsed.map((technology) => (
+            <span
+              key={technology}
+              className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+            >
+              {technology.charAt(0).toUpperCase() + technology.slice(1)}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   </div>
