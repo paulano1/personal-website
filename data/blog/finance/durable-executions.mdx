@@ -1,0 +1,82 @@
+---
+title: 'Durable Execution: Origins, Evolution, and Urgency in the AI Automation Era'
+date: '2025-10-08'
+tags: ['software', 'infrastructure', 'devops']
+draft: false
+summary: 'How durable execution has evolved from mainframes to modern AI workflows, and why it matters for building reliable distributed systems that can survive failures and continue making progress.'
+---
+
+As software and AI take over more complex workflows, durability has become essential for the code behind these processes. Modern distributed systems face many types of failures, like network timeouts, server crashes, and API errors, but we still expect them to be reliable. According to how.complexsystems.fail, complex systems often run in a "degraded" state with small flaws, staying functional because of built-in redundancies and human fixes. Failures will happen, but they don't have to be disastrous. This is where durable execution comes in. At its core, durable execution means code can keep running and finish its work, even after a crash or error. Instead of treating every failure as a crisis that needs manual intervention, durable execution platforms handle problems automatically and save progress. This lets developers focus on what the application should do, not on every possible thing that could go wrong.
+
+## Why Resilient Workflows Matter More Than Ever
+
+Previously, engineers devoted significant effort to predicting failures and developing custom solutions. As systems evolved to include microservices, serverless functions, and cloud infrastructure, potential failure points multiplied. Minor issues can combine to cause major outages unexpectedly. Even with robust safeguards and best practices, "complex systems are intrinsically hazardous" and always contain hidden risks. In this context, relying on hope that scripts or services will not crash is not a viable strategy.
+
+> Durability provides a systematic solution to these challenges.
+
+## Early Glimpses of Durable Execution: From Mainframes to Finite State Machines
+
+The concept of making computations resilient to failure is not novel. Prior to the introduction of the term “durable execution,” computer engineers developed methods to withstand crashes and interruptions:
+
+* Mainframe Batch Checkpointing: In the 1960s and 1970s, IBM mainframes introduced checkpoint and restart features, allowing batch jobs to pick up from the last saved state after a crash.
+* Job Control & Schedulers: Early schedulers like Cron restarted tasks on a schedule but lacked failure recovery, while later systems like Oracle DBMS_JOB (1995) added automatic retries for failed jobs.
+* ACID Transactions and Sagas: Transaction durability in databases (the “D” in ACID) ensures committed data isn’t lost after a crash. The Saga pattern (1980s) extended this idea to long-running, multi-step workflows by breaking them into local transactions and compensations, with orchestrators persisting state and resuming interrupted processes. 
+* Finite State Machines (FSMs) and Business Process Management (BPM) suites, including AWS Step Functions, Camunda, and Oracle BPEL, introduced the practice of saving workflow state at each step. This advancement enabled processes to recover from crashes and resume from the point of interruption. Although early implementations were complex and challenging for developers, they demonstrated the feasibility of durable execution for long-running business workflows.
+
+## The Rise of Durable Execution Platforms
+
+By the mid-2010s, the growth of microservices and cloud computing made developer-friendly, reliable workflow engines a necessity. This led to new tools like AWS Step Functions, Azure Durable Functions, and Uber’s Cadence/Temporal, which let developers write workflows as code while the platform saves the state after each step.
+
+In contrast to earlier, more complex BPM tools, these modern frameworks automate crash recovery, retries, and state management. This automation facilitates the development of reliable, exactly-once workflows for cloud applications. Their code-centric design and enhanced developer experience have contributed to widespread adoption, establishing durable execution as a standard feature in contemporary distributed systems.
+
+Not all “workflow engines” provide real durability. Many orchestrators can schedule and sequence tasks but do not save the state between steps, which makes workflows vulnerable to crashes.True durable execution platforms, like Temporal, offer a strong model: a workflow acts as a virtual thread that can be stopped and restarted at any time, whether due to a failure or a long wait, without losing progress. 
+These systems have four key features:
+
+1. Automatic and transparent state persistence (eliminating boilerplate and manual database saves)
+2. Built-in fault tolerance through retries from the last checkpoint
+3. No hard time limits, so workflows can span minutes, months, or longer and survive process churn
+4. Hardware agnosticism, which achieves reliability entirely through software across various cloud environments and regions. Collectively, these properties make “crash-proof” code attainable and fundamentally transform the design, reasoning, and trust in complex applications.
+
+## Durable Execution in the Age of AI and Autonomous Workflows
+
+Durable execution is especially important for AI-driven automation. AI agents and LLM-based systems now manage complex tasks, such as coordinating travel bookings or breaking projects into subtasks and working across APIs for extended periods.
+
+* Orchestrating AI calls and tool actions is a workflow challenge. Durable execution ensures each step is saved, so if a failure occurs, progress isn’t lost and work resumes from the last successful step.
+* Durable orchestrators automatically retry failed AI steps and restore progress from storage, keeping workflows consistent. By saving results and context, they ensure reliable output even after interruptions or restarts.
+* Durable execution works best for deterministic AI agents, saving progress at each step and enabling retries without losing work. For self-directed agents, durability checkpoints allow resuming from the last successful point after interruptions.
+* Durable systems also excel at handling long waits or human approvals. An orchestrator can pause a workflow indefinitely—waiting for events or input—without wasting resources. When resumed, the process picks up exactly where it left off. This is far more reliable than relying on chatbots to maintain state and supports AI workflows lasting days or weeks.
+
+In summary, as we expose “human hard work” through APIs and services and delegate their coordination to AI, durable execution becomes the essential component that ensures reliability. It distinguishes an “AI worker” that stops at the first issue from one that persistently completes its tasks unless explicitly stopped.
+
+
+
+## How are we using it at Mercor?
+
+### Durable orchestration and exactly-once semantics
+
+We assign deterministic workflow IDs, like `workflow:{idempotencyKey}`, so each logical job has a single, persistent workflow run. Temporal persists all workflow state and event history, replaying them after failures or restarts. This gives us true exactly-once orchestration: even if a worker crashes or redeploys, the workflow picks up in the right place, with no risk of double-processing.
+
+On the activity side, we design every side-effect to be idempotent. For example, if an invite user or add to project action is retried due to a transient error or duplicate trigger, the underlying operation is a safe no-op, enforced through DB uniqueness constraints or natural keys. This has made retries and duplicate webhook deliveries non-events in our ops logs.
+
+### Webhook reliability: "Don't miss the event" patterns
+
+Incoming events, like Slack commands or vendor webhooks, are routed immediately to a Temporal workflow using the atomic signal_with_start_sync pattern. We 200 the webhook call instantly, never holding the connection open, and then either start or signal the relevant workflow behind the scenes. No more dropped events just because a workflow was not running yet.
+Even if webhooks are missed, we poll to ensure the states are in sync.
+For especially noisy sources, such as background check providers, we generate workflow IDs and idempotency keys directly from the webhook payload. This deduplicates repeated calls and ensures the correct workflow is updated, regardless of how many times the webhook is retried upstream.
+
+We also use Temporal's "update with start" pattern, guaranteeing that even if a workflow isn't running yet, an update will be atomically applied at creation—eliminating race conditions where updates might otherwise arrive too early.
+
+### Never missing a timer
+
+Critical delays, like waiting until a project's start date to assign a user, are handled with Temporal's durable timers. If the process is redeployed or a worker restarts, the timer survives with no missed windows. If a start date changes, we simply cancel and reschedule the timer via a signal, ensuring precise timing without manual cleanup.
+
+### Smart retries and backoff strategies
+
+We configure retry policies per activity, classify errors (5xx, 429, network blips), and apply capped exponential backoff. Temporal persists retry state as workflow history, so even in the face of repeated failures or restarts, we avoid double-sending or excessive retries. For rate-limited APIs like Slack, we enforce stricter per-minute caps, while other internal activities use more aggressive policies.
+
+### Async UX without data loss
+
+For user-facing flows like offer acceptance, once the feature flag is enabled, we start the Temporal workflow and immediately return a 202/Accepted. The workflow runs in the background, driving all side-effects reliably and idempotently, so users never get blocked by long-running operations or transient third-party failures. Communications and provisioning activities treat hiccups as retryable or safe to skip, preventing full workflow failure.
+
+**NOTE**: It’s important to remember that durable execution is not a cure-all for every type of failure. It won’t fix a logical bug that causes a wrong calculation—if your code is incorrect, it will still produce the wrong result, just more reliably! Also, if an external system never recovers, like a permanently down API, you will still see failures, though a durable system usually allows for graceful timeouts or compensation. Durability also adds some overhead: performance may be lower than with temporary code because of constant state saving, and some code must be deterministic or pure, especially in systems like Temporal. These trade-offs are worth it for most cases that need reliability, but good architecture and testing are still necessary.
+
