@@ -76,7 +76,7 @@ We configure retry policies per activity, classify errors (5xx, 429, network bli
 
 ### Async UX without data loss
 
-For user-facing flows like offer acceptance, once the feature flag is enabled, we start the Temporal workflow and immediately return a 202/Accepted. The workflow runs in the background, driving all side-effects reliably and idempotently, so users never get blocked by long-running operations or transient third-party failures. Communications and provisioning activities treat hiccups as retryable or safe to skip, preventing full workflow failure.
+Flow that need guaranteed execution immediately return a 202/Accepted. The workflow runs in the background, driving all side-effects reliably and idempotently, so users never get blocked by long-running operations or transient third-party failures. Communications and provisioning activities treat hiccups as retryable or safe to skip, preventing full workflow failure.
 
 **NOTE**: It’s important to remember that durable execution is not a cure-all for every type of failure. It won’t fix a logical bug that causes a wrong calculation—if your code is incorrect, it will still produce the wrong result, just more reliably! Also, if an external system never recovers, like a permanently down API, you will still see failures, though a durable system usually allows for graceful timeouts or compensation. Durability also adds some overhead: performance may be lower than with temporary code because of constant state saving, and some code must be deterministic or pure, especially in systems like Temporal. These trade-offs are worth it for most cases that need reliability, but good architecture and testing are still necessary.
 
