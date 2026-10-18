@@ -1,3 +1,48 @@
+# Anomitro Paul’s personal website
+
+Built with Next.js, React, Tailwind CSS, and Contentlayer. Production is hosted on Vercel at https://www.anomitropaul.com.
+
+## Local development
+
+Use Node.js 24 (see `.node-version`) and the bundled Yarn version:
+
+```sh
+node .yarn/releases/yarn-4.18.1.cjs install --immutable
+node .yarn/releases/yarn-4.18.1.cjs dev
+```
+
+Yarn is the package manager for this project; `yarn.lock` is the dependency lockfile.
+TypeScript stays on 6.0.3 because the current typescript-eslint release does not support TypeScript 7.
+The font is self-hosted through Fontsource, so builds do not fetch Google Fonts.
+
+## Production validation and deployment
+
+```sh
+node .yarn/releases/yarn-4.18.1.cjs lint
+node .yarn/releases/yarn-4.18.1.cjs build
+node .yarn/releases/yarn-4.18.1.cjs typecheck
+node .yarn/releases/yarn-4.18.1.cjs serve
+# In another terminal:
+node .yarn/releases/yarn-4.18.1.cjs smoke
+```
+
+The smoke checks cover page content, blog routes, pagination, missing pages, search data,
+RSS, sitemap, robots.txt, stylesheets, and self-hosted fonts. To check a deployed site,
+run `SMOKE_ORIGIN=https://www.anomitropaul.com node scripts/smoke.mjs`.
+
+`vercel.json` specifies the Next.js framework, frozen dependency installation, and production
+build command. The project uses Node.js 24. Pushes to the Vercel project's configured
+production branch should trigger deployment when its Git integration is enabled.
+Check the deployment status and run the smoke checks against its URL before considering
+a release complete. `.github/workflows/ci.yml` validates the production build independently.
+The GitHub Pages workflow is retained as a manual, optional static deployment target.
+
+Analytics and Giscus comments require their optional provider IDs. Newsletter subscriptions
+require a configured Buttondown account and its server-side API credential; these integrations
+are not required to develop or render the site.
+
+---
+
 ![tailwind-nextjs-banner](/public/static/images/twitter-card.png)
 
 # Tailwind Nextjs Starter Blog
