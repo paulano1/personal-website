@@ -1,4 +1,3 @@
-import NewsletterForm from '@/components/NewsletterForm'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { allBlogs } from 'contentlayer/generated'
 import { genPageMetadata } from 'app/seo'
@@ -19,14 +18,11 @@ export default async function BlogPage(props: { searchParams: Promise<{ page: st
   }
 
   return (
-    <>
-      <ListLayout
-        posts={posts}
-        initialDisplayPosts={initialDisplayPosts}
-        pagination={pagination}
-        title="All Posts"
-      />
-      <NewsletterForm />
-    </>
+    <ListLayout
+      posts={posts}
+      initialDisplayPosts={initialDisplayPosts}
+      pagination={pagination}
+      title="All Posts"
+    />
   )
 }
