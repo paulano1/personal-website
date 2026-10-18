@@ -5,7 +5,7 @@ The app uses Neon Postgres over HTTPS, compatible with a Neon database connected
 ## Connect production storage
 
 1. In Vercel project `paulano1s-projects/personal-website`, open **Storage** and connect a Neon Postgres database through Marketplace. Use a production database binding for Production and an isolated database/branch for Preview.
-2. Ensure the project receives the secret `DATABASE_URL` connection string. Keep it server-side; never put it in a `NEXT_PUBLIC_` variable or paste it into chat/source files.
+2. Ensure the project receives the secret `DATABASE_URL` connection string, or the existing Neon integration variable `PERSONAL_WEBSITE_POSTGRES_URL`. The app and build initializer accept either, with `DATABASE_URL` taking precedence. Keep it server-side; never put it in a `NEXT_PUBLIC_` variable or paste it into chat/source files.
 3. Redeploy. The build runs `scripts/setup-engagement.mjs --if-configured`, which creates the two tables and seeds the view counter at **1,000 only if it does not exist**. It does not reset existing totals or reactions. Database initialization failure stops the build.
 
 You can initialize manually from a secure terminal with DATABASE_URL injected, or use a local ignored environment file:

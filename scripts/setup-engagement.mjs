@@ -1,16 +1,18 @@
 import { neon } from '@neondatabase/serverless'
 import { readFile } from 'node:fs/promises'
 
-if (!process.env.DATABASE_URL) {
+const connectionString = process.env.DATABASE_URL || process.env.PERSONAL_WEBSITE_POSTGRES_URL
+
+if (!connectionString) {
   if (process.argv.includes('--if-configured'))
     console.log('Engagement database not configured; skipping initialization.')
   else {
-    console.error('Configure DATABASE_URL securely before initializing engagement storage.')
+    console.error('Configure DATABASE_URL or PERSONAL_WEBSITE_POSTGRES_URL securely before initializing engagement storage.')
     process.exitCode = 1
   }
 } else {
   try {
-    const sql = neon(process.env.DATABASE_URL)
+    const sql = neon(connectionString)
     const source = await readFile(
       new URL('../db/migrations/001_engagement.sql', import.meta.url),
       'utf8'
