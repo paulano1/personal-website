@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers'
 import { engagementStore } from '@/lib/engagement/database'
 import { PRIVATE_HEADERS, sameOrigin } from '@/lib/newsletter/http'
 
@@ -11,7 +12,17 @@ async function views(record: boolean) {
         { error: 'View count is unavailable.' },
         { status: 503, headers: PRIVATE_HEADERS }
       )
-    const value = record ? await store.recordView() : await store.getViews()
+    const cookieStore = await cookies()
+    const alreadyCounted = cookieStore.get('site_visit')?.value === '1'
+    const value = record && !alreadyCounted ? await store.recordView() : await store.getViews()
+    if (record && !alreadyCounted) {
+      cookieStore.set('site_visit', '1', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+      })
+    }
     return Response.json({ views: value }, { headers: PRIVATE_HEADERS })
   } catch {
     console.error('Could not read or update the site view count')

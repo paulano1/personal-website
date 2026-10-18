@@ -18,7 +18,7 @@ A saved requirement in the Codex cloud configuration does not create a database 
 
 ## Counting behavior
 
-- Views count JavaScript-rendered page visits and client-side route changes, not unique people. The first visit after the seed increments 1,000 to 1,001. React Strict Mode replay does not count the same mounted navigation twice. Counting uses an atomic database increment.
+- The footer counts browser sessions and displays “visits”. A server-set HttpOnly session cookie prevents reloads, navigation, and additional tabs from incrementing the count again in the same browser session. The cookie contains only a counted flag, not a visitor identifier. Browsers may restore session cookies when restoring a session. A new session increments the total atomically; existing totals are preserved.
 - A small heart under each post lets visitors like or unlike it. The database enforces one like per browser token per post. Requests set the desired state rather than blindly toggling it, so retrying a request does not duplicate a like.
 - The random browser token is stored only in an HttpOnly, SameSite cookie, secure in production. The database stores a post-specific SHA-256 hash of that token, not the token itself. Different posts get different hashes. The application does not collect names, email addresses, IP addresses, or user agents for engagement. This is browser-level deduplication, not proof of a person's identity.
 - Missing/unavailable storage hides the public counters rather than showing invented activity. The APIs return HTTP 503. Unknown/draft posts are rejected before database access; writes validate browser origin and use parameterized SQL.
