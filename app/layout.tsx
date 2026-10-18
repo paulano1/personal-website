@@ -1,3 +1,4 @@
+import { NewsletterProvider } from '@/components/NewsletterSubscribe'
 import 'css/tailwind.css'
 import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
@@ -88,16 +89,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
         <ThemeProviders>
-          <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
-          <VercelAnalytics />
-          <SpeedInsights />
-          <SectionContainer>
-            <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
-              <Header />
-              <main className="mb-auto">{children}</main>
-            </SearchProvider>
-            <Footer />
-          </SectionContainer>
+          <NewsletterProvider>
+            <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
+            <VercelAnalytics />
+            <SpeedInsights />
+            <SectionContainer>
+              <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
+                <Header />
+                <main className="mb-auto">{children}</main>
+              </SearchProvider>
+              <Footer />
+            </SectionContainer>
+          </NewsletterProvider>
         </ThemeProviders>
       </body>
     </html>

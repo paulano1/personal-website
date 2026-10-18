@@ -4,7 +4,7 @@ const origin = process.env.SMOKE_ORIGIN || 'http://127.0.0.1:3000'
 const checks = [
   ['/', 200, 'I go by Ano.'],
   ['/about', 200, 'I go by Ano.'],
-  ['/newsletter', 200, 'Stay in the loop'],
+  ['/newsletter', 200, 'New posts in your inbox, once a week.'],
   ['/newsletter/confirm', 200, 'Confirm your subscription'],
   ['/projects', 200, 'Opioid Addiction Recovery'],
   ['/blog', 200, 'Why Mercor'],

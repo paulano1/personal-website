@@ -9,17 +9,18 @@ export const metadata = genPageMetadata({
 
 export default function NewsletterPage() {
   return (
-    <div className="max-w-2xl py-10">
-      <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">Stay in the loop</h1>
-      <p className="mt-5 text-lg text-gray-600 dark:text-gray-400">
-        I write about building software, understanding finance, and following my curiosity. Get new
-        posts in your inbox on Mondays—no email in weeks when I haven’t published.
-      </p>
-      <NewsletterForm />
-      <p className="text-sm text-gray-500 dark:text-gray-400">
-        Your email address is used only for this newsletter and stored securely with Resend. You can
-        unsubscribe using the link in any issue.
-      </p>
+    <div>
+      <div className="space-y-2 border-b border-gray-200 pt-6 pb-8 md:space-y-5 dark:border-gray-700">
+        <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
+          Newsletter
+        </h1>
+        <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
+          New posts in your inbox, once a week. Unsubscribe anytime.
+        </p>
+      </div>
+      <div className="max-w-lg py-6 sm:py-10">
+        <NewsletterForm />
+      </div>
     </div>
   )
 }

@@ -19,6 +19,10 @@ The font is self-hosted through Fontsource, so builds do not fetch Google Fonts.
 
 Subscribe at `/newsletter`. Weekly issues contain new blog posts and are sent on Mondays at 9 a.m. Pacific after email confirmation. Setup and operator controls are documented in [docs/newsletter.md](docs/newsletter.md). Delivery stays disabled until the required Resend and Vercel settings are supplied.
 
+## Likes and views
+
+Posts have an anonymous like button and the footer shows total page views, seeded once at 1,000. Connect a Neon Postgres database in Vercel and set the server-only `DATABASE_URL`; setup runs automatically during a configured build. See [database setup and counting behavior](docs/engagement.md).
+
 ## Production validation and deployment
 
 ```sh

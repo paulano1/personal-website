@@ -5,19 +5,21 @@
   "scripts": {
     "start": "next dev --webpack",
     "dev": "cross-env INIT_CWD=$PWD next dev --webpack",
-    "build": "cross-env INIT_CWD=$PWD next build --webpack && node ./scripts/postbuild.mjs",
+    "build": "node scripts/setup-engagement.mjs --if-configured && cross-env INIT_CWD=$PWD next build --webpack && node ./scripts/postbuild.mjs",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build --webpack",
     "lint": "eslint app components lib layouts scripts data workflows --no-fix",
     "prepare": "husky",
     "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile .next/cache/typecheck.tsbuildinfo",
     "smoke": "node scripts/smoke.mjs",
-    "test:newsletter": "node --test tests/newsletter.test.mjs"
+    "test:newsletter": "node --test tests/newsletter.test.mjs",
+    "test:engagement": "node --test tests/engagement.test.mjs"
   },
   "dependencies": {
     "@algolia/client-search": "^5.60.0",
     "@fontsource-variable/space-grotesk": "^5.3.0",
     "@headlessui/react": "2.2.10",
+    "@neondatabase/serverless": "1.2.0",
     "@next/bundle-analyzer": "16.4.2",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.3.3",
@@ -74,6 +76,7 @@
     "globals": "^17.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
+    "pg": "^8.23.1",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "~6.0.3"

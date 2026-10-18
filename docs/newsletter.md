@@ -27,7 +27,7 @@ Redeploy after changing Vercel variables. Set a Vercel Firewall rate limit on `P
 
 ## Reader journey
 
-1. A reader submits their email at `/newsletter`, on the homepage, or below the blog list.
+1. A reader opens the shared signup modal from the button below the profile name, the author area on a blog post, or the footer. The `/newsletter` page also offers the same email form. After three seconds on the site, the modal opens automatically once; signup and confirmation pages are excluded to avoid interrupting those flows. Closing it or successfully submitting stores `newsletter-prompt-handled-v1` in localStorage, so it does not open automatically again in that browser (unless site storage is cleared). Manual Subscribe buttons continue to work, and the preference is synchronized between tabs. No email address is stored in this browser preference.
 2. Workflow creates a cryptographically random, expiring confirmation token in a **step**, commits its hook, and sends a confirmation email through Resend. Nothing is added to the mailing list yet.
 3. The link opens `/newsletter/confirm#token`. The fragment stays out of server requests/referrers. Opening the link does not subscribe the reader; the reader must press **Confirm subscription**, so mail scanners cannot opt them in automatically.
 4. The authenticated token resumes the existing workflow, which adds the confirmed email to the dedicated segment. A used or expired token cannot enroll again. Confirmation expires after 24 hours.

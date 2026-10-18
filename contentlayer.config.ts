@@ -137,6 +137,7 @@ export const Authors = defineDocumentType(() => ({
     avatar: { type: 'string' },
     occupation: { type: 'string' },
     company: { type: 'string' },
+    additionalRole: { type: 'string' },
     email: { type: 'string' },
     twitter: { type: 'string' },
     bluesky: { type: 'string' },

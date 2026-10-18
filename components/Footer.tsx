@@ -1,3 +1,5 @@
+import SiteViews from './SiteViews'
+import NewsletterSubscribe from './NewsletterSubscribe'
 import Link from './Link'
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
@@ -6,9 +8,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="mt-16 flex flex-col items-center">
-        <Link href="/newsletter" className="text-primary-600 dark:text-primary-400 mb-5 text-sm">
-          Subscribe to the newsletter
-        </Link>
+        <NewsletterSubscribe variant="text" />
         <div className="mb-3 flex space-x-4">
           <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={6} />
           <SocialIcon kind="github" href={siteMetadata.github} size={6} />
@@ -28,6 +28,7 @@ export default function Footer() {
           <div>{`© ${new Date().getFullYear()}`}</div>
           <div>{` • `}</div>
           <Link href="/">{siteMetadata.title}</Link>
+          <SiteViews />
         </div>
       </div>
     </footer>

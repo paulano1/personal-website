@@ -11,6 +11,20 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql://postgres@127.0.0.1:5432/postgres
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7.1.0
@@ -18,6 +32,7 @@ jobs:
           node-version-file: .node-version
       - run: node .yarn/releases/yarn-4.18.1.cjs install --immutable
       - run: node .yarn/releases/yarn-4.18.1.cjs test:newsletter
+      - run: node .yarn/releases/yarn-4.18.1.cjs test:engagement
       - run: node .yarn/releases/yarn-4.18.1.cjs lint
       - run: node .yarn/releases/yarn-4.18.1.cjs build
       - run: node .yarn/releases/yarn-4.18.1.cjs typecheck
