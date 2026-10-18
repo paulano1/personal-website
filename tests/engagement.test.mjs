@@ -45,6 +45,13 @@ test(
         assert.equal(new Set(values).size, 40)
         assert.equal(await store.getViews(), 1040)
       })
+      await t.test('starting likes are seeded once and do not identify real browsers', async () => {
+        const slug = 'personal/durable-executions'
+        const visitor = postVisitorHash(slug, newBrowserToken())
+        assert.deepEqual(await store.getLikes(slug, visitor), { likes: 11, liked: false })
+        await pool.query(migration)
+        assert.deepEqual(await store.getLikes(slug, visitor), { likes: 11, liked: false })
+      })
       await t.test('rerunning setup preserves existing totals', async () => {
         await pool.query(migration)
         assert.equal(await store.getViews(), 1040)

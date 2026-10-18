@@ -16,6 +16,10 @@ node --env-file=.env.local scripts/setup-engagement.mjs
 
 A saved requirement in the Codex cloud configuration does not create a database or configure the Vercel project. Local use also needs the actual database binding and HTTPS access to that specific Neon endpoint. The integration uses the connection string to construct the Neon HTTPS request, so a placeholder string cannot substitute for a valid runtime connection URL.
 
+## Starting likes
+
+The owner requested initial likes for the five existing published posts: Why Mercor 7, Durable Execution 11, Time Value of Money 9, Studying in the US 6, and LocalStack 4. These 37 seeded likes are synthetic starting data, not measured visitor reactions. The migration uses deterministic seed hashes and inserts only missing rows, preserving real reactions and avoiding duplicates on redeploy. Future posts start at zero.
+
 ## Counting behavior
 
 - The footer counts browser sessions and displays “visits”. A server-set HttpOnly session cookie prevents reloads, navigation, and additional tabs from incrementing the count again in the same browser session. The cookie contains only a counted flag, not a visitor identifier. Browsers may restore session cookies when restoring a session. A new session increments the total atomically; existing totals are preserved.
