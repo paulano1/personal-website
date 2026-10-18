@@ -15,6 +15,10 @@ Yarn is the package manager for this project; `yarn.lock` is the dependency lock
 TypeScript stays on 6.0.3 because the current typescript-eslint release does not support TypeScript 7.
 The font is self-hosted through Fontsource, so builds do not fetch Google Fonts.
 
+## Newsletter
+
+Subscribe at `/newsletter`. Weekly issues contain new blog posts and are sent on Mondays at 9 a.m. Pacific after email confirmation. Setup and operator controls are documented in [docs/newsletter.md](docs/newsletter.md). Delivery stays disabled until the required Resend and Vercel settings are supplied.
+
 ## Production validation and deployment
 
 ```sh
@@ -35,11 +39,9 @@ build command. The project uses Node.js 24. Pushes to the Vercel project's confi
 production branch should trigger deployment when its Git integration is enabled.
 Check the deployment status and run the smoke checks against its URL before considering
 a release complete. `.github/workflows/ci.yml` validates the production build independently.
-The GitHub Pages workflow is retained as a manual, optional static deployment target.
+The newsletter requires a server runtime; the old GitHub Pages deployment workflow has been removed.
 
-Analytics and Giscus comments require their optional provider IDs. Newsletter subscriptions
-require a configured Buttondown account and its server-side API credential; these integrations
-are not required to develop or render the site.
+Analytics and Giscus comments require their optional provider IDs. Newsletter signup and a weekly digest use Vercel Workflow and Resend. See [newsletter setup and operations](docs/newsletter.md) for activation, double opt-in, scheduling, and unsubscribe behavior. Credentials are not required to build or test the site.
 
 ---
 
@@ -330,7 +332,7 @@ canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/introducing-t
 
 ### GitHub Pages
 
-A [`pages.yml`](.github/workflows/pages.yml) workflow is already provided. Simply select "GitHub Actions" in: `Settings > Pages > Build and deployment > Source`.
+The newsletter uses server routes and durable workflows, so this site requires a server runtime. GitHub Pages cannot host the newsletter and its deployment workflow has been removed.
 
 ### Vercel
 
@@ -342,32 +344,9 @@ The easiest way to deploy the template is to deploy on [Vercel](https://vercel.c
 
 See [Next.js on Netlify](https://docs.netlify.com/integrations/frameworks/next-js/overview/#next-js-runtime) for suggested configuration values and more details.
 
-### Static hosting services (GitHub Pages / S3 / Firebase etc.)
+### Static hosting
 
-Run:
-
-```sh
-$ EXPORT=1 UNOPTIMIZED=1 yarn build
-```
-
-Then, deploy the generated `out` folder or run `npx serve out` it locally.
-
-> [!IMPORTANT]
-> If deploying with a URL base path, like https://example.org/myblog you need an extra `BASE_PATH` shell-var to the build command:
->
-> ```sh
-> $ EXPORT=1 UNOPTIMIZED=1 BASE_PATH=/myblog yarn build
-> ```
->
-> => In your code, `${process.env.BASE_PATH || ''}/robots.txt` will print `"/myblog/robots.txt"` in the `out` build (or only `/robots.txt` if `yarn dev`, ie: on localhost:3000)
-
-> [!TIP]
-> Alternatively to `UNOPTIMIZED=1`, to continue using `next/image`, you can use an alternative image optimization provider such as Imgix, Cloudinary or Akamai. See [image optimization documentation](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#image-optimization) for more details.
-
-Consider removing the following features that cannot be used in a static build:
-
-1. Comment out `headers()` from `next.config.js`.
-2. Remove `api` folder and components which call the server-side function such as the Newsletter component. Not technically required and the site will build successfully, but the APIs cannot be used as they are server-side functions.
+Static exports cannot run the newsletter API, confirmation workflows, or scheduled digest. Deploy this application on Vercel using `vercel.json`; see [newsletter operations](docs/newsletter.md) for production configuration.
 
 ## Frequently Asked Questions
 

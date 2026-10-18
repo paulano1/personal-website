@@ -2,5 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "node .yarn/releases/yarn-4.18.1.cjs install --immutable",
-  "buildCommand": "node .yarn/releases/yarn-4.18.1.cjs build"
+  "buildCommand": "node .yarn/releases/yarn-4.18.1.cjs build",
+  "crons": [
+    {
+      "path": "/api/cron/newsletter",
+      "schedule": "0 16 * * 1"
+    }
+  ]
 }

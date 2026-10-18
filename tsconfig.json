@@ -23,14 +23,19 @@
       "contentlayer/generated": ["./.contentlayer/generated"],
       "pliny/*": ["./node_modules/pliny/*"],
       "app/*": ["./app/*"],
-      "css/*": ["./css/*"]
+      "css/*": ["./css/*"],
+      "@/*": ["./*"]
     },
     "plugins": [
       {
         "name": "next"
+      },
+      {
+        "name": "workflow"
       }
     ],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "allowImportingTsExtensions": true
   },
   "include": [
     "next-env.d.ts",

@@ -1,3 +1,4 @@
+import NewsletterForm from '@/components/NewsletterForm'
 import { Authors, allAuthors } from 'contentlayer/generated'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import AuthorLayout from '@/layouts/AuthorLayout'
@@ -15,6 +16,7 @@ export default function Page() {
       <AuthorLayout content={mainContent}>
         <MDXLayoutRenderer code={author.body.code} />
       </AuthorLayout>
+      <NewsletterForm />
     </>
   )
 }

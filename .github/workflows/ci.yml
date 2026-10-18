@@ -17,6 +17,7 @@ jobs:
         with:
           node-version-file: .node-version
       - run: node .yarn/releases/yarn-4.18.1.cjs install --immutable
+      - run: node .yarn/releases/yarn-4.18.1.cjs test:newsletter
       - run: node .yarn/releases/yarn-4.18.1.cjs lint
       - run: node .yarn/releases/yarn-4.18.1.cjs build
       - run: node .yarn/releases/yarn-4.18.1.cjs typecheck

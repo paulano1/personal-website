@@ -8,10 +8,11 @@
     "build": "cross-env INIT_CWD=$PWD next build --webpack && node ./scripts/postbuild.mjs",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build --webpack",
-    "lint": "eslint app components layouts scripts data --no-fix",
+    "lint": "eslint app components lib layouts scripts data workflows --no-fix",
     "prepare": "husky",
     "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile .next/cache/typecheck.tsbuildinfo",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "test:newsletter": "node --test tests/newsletter.test.mjs"
   },
   "dependencies": {
     "@algolia/client-search": "^5.60.0",
@@ -51,9 +52,11 @@
     "remark-gfm": "^4.0.1",
     "remark-github-blockquote-alert": "^2.1.0",
     "remark-math": "^6.0.0",
+    "resend": "6.34.1",
     "search-insights": "^2.17.3",
     "tailwindcss": "^4.3.3",
-    "unist-util-visit": "^5.1.0"
+    "unist-util-visit": "^5.1.0",
+    "workflow": "5.2.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.7",

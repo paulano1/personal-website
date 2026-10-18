@@ -7,7 +7,13 @@ export default defineConfig([
   ...nextVitals,
   ...nextTypescript,
   prettier,
-  globalIgnores(['.next/**', '.contentlayer/**', 'out/**', 'next-env.d.ts']),
+  globalIgnores([
+    '.next/**',
+    '.contentlayer/**',
+    'out/**',
+    'next-env.d.ts',
+    'app/.well-known/workflow/**',
+  ]),
   {
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',

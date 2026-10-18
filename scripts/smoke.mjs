@@ -4,6 +4,8 @@ const origin = process.env.SMOKE_ORIGIN || 'http://127.0.0.1:3000'
 const checks = [
   ['/', 200, 'I go by Ano.'],
   ['/about', 200, 'I go by Ano.'],
+  ['/newsletter', 200, 'Stay in the loop'],
+  ['/newsletter/confirm', 200, 'Confirm your subscription'],
   ['/projects', 200, 'Opioid Addiction Recovery'],
   ['/blog', 200, 'Why Mercor'],
   ['/blog/personal/why-mercor', 200, 'Hiring Inefficiencies'],
@@ -26,6 +28,25 @@ for (const [path, status, content] of checks) {
   assert.ok(body.includes(content), `${path}: expected content ${JSON.stringify(content)}`)
   console.log(`PASS ${path} (${status})`)
 }
+
+// These checks never enqueue mail or a digest and need no credentials.
+const availability = await fetch(new URL('/api/newsletter', origin))
+assert.equal(availability.status, 200, 'Newsletter availability endpoint')
+assert.equal(typeof (await availability.json()).enabled, 'boolean')
+assert.ok(availability.headers.get('cache-control')?.includes('no-store'))
+const invalidSignup = await fetch(new URL('/api/newsletter', origin), {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email: 'not-an-email' }),
+})
+assert.equal(invalidSignup.status, 400, 'Invalid signup is rejected before provider access')
+const invalidConfirmation = await fetch(new URL('/api/newsletter/confirm', origin), {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ token: 'invalid' }),
+})
+assert.equal(invalidConfirmation.status, 410, 'Invalid confirmation token is rejected')
+console.log('PASS newsletter availability and safe input rejection')
 
 const home = await fetch(new URL('/', origin)).then((response) => response.text())
 const stylesheets = [...home.matchAll(/href="([^\"]+\.css(?:\?[^\"]*)?)"/g)].map((match) =>
