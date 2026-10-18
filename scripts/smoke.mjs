@@ -7,15 +7,15 @@ const checks = [
   ['/newsletter', 200, 'New posts in your inbox, once a week.'],
   ['/newsletter/confirm', 200, 'Confirm your subscription'],
   ['/projects', 200, 'Opioid Addiction Recovery'],
-  ['/blog', 200, 'Why Mercor'],
-  ['/blog/personal/why-mercor', 200, 'Hiring Inefficiencies'],
+  ['/blog', 200, 'Durable Execution'],
+  ['/blog/personal/why-mercor', 404, ''],
   ['/blog/personal/durable-executions', 200, 'Durable Execution'],
   ['/tags', 200, 'finance'],
   ['/tags/finance', 200, 'Finance'],
   ['/blog/page/1', 200, 'All Posts'],
   ['/blog/page/999', 404, ''],
   ['/blog/does-not-exist', 404, ''],
-  ['/search.json', 200, 'why-mercor'],
+  ['/search.json', 200, 'durable-executions'],
   ['/feed.xml', 200, '<rss'],
   ['/sitemap.xml', 200, 'https://www.anomitropaul.com/blog/'],
   ['/robots.txt', 200, 'Sitemap:'],
@@ -26,6 +26,8 @@ for (const [path, status, content] of checks) {
   assert.equal(response.status, status, `${path}: HTTP status`)
   const body = await response.text()
   assert.ok(body.includes(content), `${path}: expected content ${JSON.stringify(content)}`)
+  if (['/', '/blog', '/search.json', '/feed.xml', '/sitemap.xml', '/blog/personal/durable-executions'].includes(path))
+    assert.ok(!/why-mercor|Why Mercor/.test(body), `${path}: hidden draft must not appear`)
   console.log(`PASS ${path} (${status})`)
 }
 
