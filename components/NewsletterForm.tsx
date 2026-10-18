@@ -87,9 +87,7 @@ export default function NewsletterForm() {
         <input id={`${id}-website`} name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
       <p id={`${id}-help`} className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-        {available === false
-          ? 'Signups are opening soon. Please check back shortly.'
-          : 'We’ll email a confirmation link first. Unsubscribe anytime with one click.'}
+        We’ll email a confirmation link first. Unsubscribe anytime with one click.
       </p>
       {message && (
         <p role="status" className="mt-4 text-sm text-green-700 dark:text-green-400">
