@@ -37,9 +37,9 @@ Pending consent is durable on Vercel and survives instance restarts. Workflow lo
 
 ## Weekly schedule and duplicate prevention
 
-`vercel.json` invokes `/api/cron/newsletter` every Monday at **16:00 UTC**. Workflow waits until **9:00 a.m. America/Los_Angeles**, which is 16:00 UTC in summer and 17:00 UTC in winter. Delivery may be later if the cron/provider is delayed; Vercel plan scheduling precision applies.
+`vercel.json` invokes `/api/cron/newsletter` every Saturday at **18:00 UTC**. Workflow waits until **11:00 a.m. America/Los_Angeles**, which is 18:00 UTC in summer and 19:00 UTC in winter. Delivery may be later if the cron/provider is delayed; Vercel plan scheduling precision applies.
 
-Each issue covers the half-open interval from the previous Monday at 9 a.m. Pacific through the current Monday at 9 a.m. Pacific. DST boundaries are calculated independently. Only published, non-draft posts whose `date` falls in that interval are included. Date-only frontmatter becomes eligible after its UTC publication day ends, so a Monday post published after the send is included the following week. Use the actual publication date; backdating a post outside the current interval will omit it. Changes to older posts do not resend them. No posts means no broadcast.
+Each issue covers the half-open interval from the previous Saturday at 11 a.m. Pacific through the current Saturday at 11 a.m. Pacific. DST boundaries are calculated independently. Only published, non-draft posts whose `date` falls in that interval are included. Date-only frontmatter becomes eligible after its UTC publication day ends, so a Saturday post published after the send is included the following week. Use the actual publication date; backdating a post outside the current interval will omit it. Changes to older posts do not resend them. No posts means no broadcast.
 
 A retained Workflow hook atomically reserves each issue key for 30 days, covering concurrent and late cron retries. Steps reconcile broadcasts by deterministic issue name, reuse the created broadcast ID, and skip sending an already queued/sent broadcast. Confirmation email retries use Resend idempotency keys.
 

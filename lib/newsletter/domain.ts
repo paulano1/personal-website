@@ -17,17 +17,17 @@ export function normalizeEmail(value: unknown): string | null {
   return email
 }
 
-// The UTC cron runs at 16:00 Monday; in winter the workflow waits until 17:00.
+// The UTC cron runs at 18:00 Saturday; in winter the workflow waits until 19:00.
 // Construct each boundary separately so DST weeks can have 167 or 169 hours.
-function ninePacific(date: Date): Date {
+function elevenPacific(date: Date): Date {
   const candidate = new Date(date)
-  candidate.setUTCHours(16, 0, 0, 0)
+  candidate.setUTCHours(18, 0, 0, 0)
   const hour = new Intl.DateTimeFormat('en-US', {
     timeZone: TIME_ZONE,
     hour: '2-digit',
     hourCycle: 'h23',
   }).format(candidate)
-  if (hour !== '09') candidate.setUTCHours(17)
+  if (hour !== '11') candidate.setUTCHours(19)
   return candidate
 }
 
@@ -38,12 +38,12 @@ export function weeklyWindow(now: Date): DigestWindow {
     month: '2-digit',
     day: '2-digit',
   }).format(now)
-  const monday = new Date(`${localDate}T00:00:00Z`)
-  monday.setUTCDate(monday.getUTCDate() - ((monday.getUTCDay() + 6) % 7))
-  const end = ninePacific(monday)
-  monday.setUTCDate(monday.getUTCDate() - 7)
+  const saturday = new Date(`${localDate}T00:00:00Z`)
+  saturday.setUTCDate(saturday.getUTCDate() - ((saturday.getUTCDay() + 1) % 7))
+  const end = elevenPacific(saturday)
+  saturday.setUTCDate(saturday.getUTCDate() - 7)
   return {
-    start: ninePacific(monday).toISOString(),
+    start: elevenPacific(saturday).toISOString(),
     end: end.toISOString(),
     key: end.toISOString().slice(0, 10),
   }
@@ -53,7 +53,7 @@ export function selectDigestPosts(posts: DigestPost[], window: DigestWindow): Di
   return posts
     .filter((post) => {
       // Date-only frontmatter has no publish time. Wait until that UTC day
-      // ends so a post published after Monday's send is not missed forever.
+      // ends so a post published after Saturday's send is not missed forever.
       const date = Date.parse(
         /^\d{4}-\d{2}-\d{2}$/.test(post.date) ? `${post.date}T23:59:59.999Z` : post.date
       )

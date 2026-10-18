@@ -17,7 +17,7 @@ The font is self-hosted through Fontsource, so builds do not fetch Google Fonts.
 
 ## Newsletter
 
-Subscribe at `/newsletter`. Weekly issues contain new blog posts and are sent on Mondays at 9 a.m. Pacific after email confirmation. Setup and operator controls are documented in [docs/newsletter.md](docs/newsletter.md). Delivery stays disabled until the required Resend and Vercel settings are supplied.
+Subscribe at `/newsletter`. Weekly issues contain new blog posts and are sent on Saturdays at 11 a.m. Pacific after email confirmation. Setup and operator controls are documented in [docs/newsletter.md](docs/newsletter.md). Delivery stays disabled until the required Resend and Vercel settings are supplied.
 
 ## Likes and views
 

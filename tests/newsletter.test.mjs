@@ -21,9 +21,9 @@ const config = {
 const ok = (data) => ({ data, error: null })
 const missing = { data: null, error: { statusCode: 404 } }
 const window = {
-  start: '2026-10-05T16:00:00.000Z',
-  end: '2026-10-12T16:00:00.000Z',
-  key: '2026-10-12',
+  start: '2026-10-03T18:00:00.000Z',
+  end: '2026-10-10T18:00:00.000Z',
+  key: '2026-10-10',
 }
 const post = {
   title: '<A & B>',
@@ -74,16 +74,16 @@ test('normalizes email and rejects invalid values', () => {
 })
 
 test('weekly boundaries follow Pacific time including both DST transitions', () => {
-  assert.equal(weeklyWindow(new Date('2026-10-12T16:00:00Z')).end, '2026-10-12T16:00:00.000Z')
-  assert.equal(weeklyWindow(new Date('2026-12-07T16:00:00Z')).end, '2026-12-07T17:00:00.000Z')
-  const spring = weeklyWindow(new Date('2026-03-09T16:00:00Z'))
+  assert.equal(weeklyWindow(new Date('2026-10-10T18:00:00Z')).end, '2026-10-10T18:00:00.000Z')
+  assert.equal(weeklyWindow(new Date('2026-12-05T18:00:00Z')).end, '2026-12-05T19:00:00.000Z')
+  const spring = weeklyWindow(new Date('2026-03-14T18:00:00Z'))
   assert.equal((Date.parse(spring.end) - Date.parse(spring.start)) / 3_600_000, 167)
-  const autumn = weeklyWindow(new Date('2026-11-02T16:00:00Z'))
+  const autumn = weeklyWindow(new Date('2026-11-07T18:00:00Z'))
   assert.equal((Date.parse(autumn.end) - Date.parse(autumn.start)) / 3_600_000, 169)
   assert.equal(
-    weeklyWindow(new Date('2026-10-12T02:00:00Z')).key,
-    '2026-10-05',
-    'Sunday evening Pacific stays in the previous week'
+    weeklyWindow(new Date('2026-10-10T02:00:00Z')).key,
+    '2026-10-03',
+    'Friday evening Pacific stays in the previous week'
   )
 })
 
@@ -107,7 +107,7 @@ test('includes start boundary once, excludes end boundary, drafts, future and in
 })
 
 test('confirmation tokens must be cryptographic format, unexpired and bounded to 24 hours', () => {
-  const now = Date.parse('2026-10-12T16:00:00Z')
+  const now = Date.parse('2026-10-10T18:00:00Z')
   const token = (expiry) => `newsletter-confirm.${'a'.repeat(64)}.${expiry}`
   assert.equal(confirmationExpiry(token(now + CONFIRMATION_TTL), now), now + CONFIRMATION_TTL)
   for (const value of [
@@ -278,9 +278,9 @@ test('origin validation uses the public Host behind the Next.js proxy', () => {
   )
 })
 
-test('date-only Monday posts wait for the next digest rather than being missed after send time', () => {
-  const mondayPost = { ...post, date: '2026-10-12' }
-  assert.equal(selectDigestPosts([mondayPost], window).length, 0)
-  const next = { start: window.end, end: '2026-10-19T16:00:00.000Z', key: '2026-10-19' }
-  assert.equal(selectDigestPosts([mondayPost], next).length, 1)
+test('date-only Saturday posts wait for the next digest rather than being missed after send time', () => {
+  const saturdayPost = { ...post, date: '2026-10-10' }
+  assert.equal(selectDigestPosts([saturdayPost], window).length, 0)
+  const next = { start: window.end, end: '2026-10-17T18:00:00.000Z', key: '2026-10-17' }
+  assert.equal(selectDigestPosts([saturdayPost], next).length, 1)
 })
